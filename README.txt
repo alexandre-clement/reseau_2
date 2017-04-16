@@ -35,6 +35,22 @@ test-get :
     ensuite tapez votre message puis appuyez sur "submit"
     le message "GET :" suivis de votre message devrait s'afficher
 
+test-post:
+        entrez l'url :
+            http://localhost:15555/test-post.html
+        ensuite tapez votre message puis appuyez sur "submit"
+        le message "POST :" suivis de votre message devrait s'afficher
 
+test-get-post:
+        entrez l'url :
+            http://localhost:15555/test-get-post.html
+        ensuite tapez votre message puis appuyez sur "submit"
+        le message "GET :" suivis de votre message devrait s'afficher
+
+test-post-get:
+        entrez l'url :
+            http://localhost:15555/test-get-post.html
+        ensuite tapez votre message puis appuyez sur "submit"
+        le message "POST :" suivis de votre message devrait s'afficher
 
 

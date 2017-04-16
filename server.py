@@ -1,6 +1,7 @@
 import socket
 import os
 import re
+import subprocess
 import unicodedata
 import sys
 
@@ -21,7 +22,7 @@ while True:
     if message is None or message == "":
         continue
 
-    print "\nmessage :\n", message, "\nend message\n"
+    # print "\nmessage :\n", message, "\nend message\n"
 
     matcher = re.search("(GET|POST) /([^ ?]*)(?:\?([^ ]*))? HTTP/1.1", message)
 
@@ -30,20 +31,22 @@ while True:
     arguments = matcher.group(3)
     body = re.search("(?m)Content-Length:\s*(\d+)\s+((?:.|\s)*)", message)
 
-    print method, url, arguments
+    # print method, url, arguments
 
     try:
+        os.environ["QUERY_STRING"] = ""
         if url.startswith("cgi-bin"):
             if method.upper() == "GET":
                 os.environ["QUERY_STRING"] = arguments
-                os.system(str.format("python {} {}", os.path.join(ROOT_PATH, url), arguments.replace("&", " ")))
+                subprocess.call(str.format("python {}".format(os.path.join(ROOT_PATH, url))), stdout=open("tmp", "w"))
             elif method.upper() == "POST":
-                # os.environ["QUERY_STRING"] = body.group(2)
-                open("tmp", "w").write(body.group(2))
-                execfile(os.path.join(ROOT_PATH, url))
+                with open("tmp_stdin", "w") as stdout:
+                    stdout.write(body.group(2))
+                subprocess.call(str.format("python {}".format(os.path.join(ROOT_PATH, url))), stdin=open("tmp_stdin"), stdout=open("tmp", "w"))
             page = open("tmp")
         else:
             page = open(os.path.join(ROOT_PATH, url))
+        os.environ["QUERY_STRING"] = ""
     except (IOError, AttributeError), error:
         print error
         page = open(os.path.join(ROOT_PATH, INDEX))
@@ -51,6 +54,7 @@ while True:
     connectionSocket.send("HTTP/1.1 200 OK\r\n\r\n")
 
     connectionSocket.send(page.read())
+    page.close()
 
     connectionSocket.send("\r\n")
     connectionSocket.close()

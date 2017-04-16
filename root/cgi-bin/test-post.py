@@ -1,7 +1,7 @@
 #!/usr/bin/python
-import os
+import sys
 
-get = dict(item for item in [arg.split("=") for arg in os.environ["QUERY_STRING"].split("&")])
+post = dict(item for item in [arg.split("=") for arg in sys.stdin.read().split("&")])
 
 web_page = """<!DOCTYPE html><HTML>
        <HEAD>
@@ -13,4 +13,5 @@ web_page = """<!DOCTYPE html><HTML>
        </BODY>
        </HTML>"""
 
-print web_page.format("GET : %s" % get["message"], "By %s" % get["author"])
+print web_page.format("POST : %s" % post["message"], "By %s" % post["author"])
+
