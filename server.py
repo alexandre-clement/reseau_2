@@ -18,7 +18,7 @@ while True:
     connectionSocket, address = serverSocket.accept()
 
     message = connectionSocket.recv(1024)
-    if message is None:
+    if message is None or message == "":
         continue
 
     print "\nmessage :\n", message, "\nend message\n"
@@ -28,7 +28,7 @@ while True:
     method = matcher.group(1)
     url = matcher.group(2)
     arguments = matcher.group(3)
-    body = re.search("(?m)Content-Length: (\d+)\s+((?:.|\s)*)", message)
+    body = re.search("(?m)Content-Length:\s*(\d+)\s+((?:.|\s)*)", message)
 
     print method, url, arguments
 
@@ -38,7 +38,8 @@ while True:
                 os.environ["QUERY_STRING"] = arguments
                 os.system(str.format("python {} {}", os.path.join(ROOT_PATH, url), arguments.replace("&", " ")))
             elif method.upper() == "POST":
-                os.environ["QUERY_STRING"] = body.group(2)
+                # os.environ["QUERY_STRING"] = body.group(2)
+                open("tmp", "w").write(body.group(2))
                 execfile(os.path.join(ROOT_PATH, url))
             page = open("tmp")
         else:

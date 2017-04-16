@@ -29,3 +29,12 @@ url par défaut à utiliser :
         http://127.0.0.1:15555/index.html
 
 
+test-get :
+    entrez l'url :
+        http://localhost:15555/test-get.html
+    ensuite tapez votre message puis appuyez sur "submit"
+    le message "GET :" suivis de votre message devrait s'afficher
+
+
+
+

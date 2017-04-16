@@ -13,6 +13,7 @@ web = "<!DOCTYPE html><HTML>\
        </BODY>\
        </HTML>"
 
-variables_envi = {key: value for (key, value) in [arg.split("=") for arg in os.environ["QUERY_STRING"].split("&")]}
+tmp = open("tmp").read()
+variables_envi = {key: value for (key, value) in [arg.split("=") for arg in tmp.split("&")]}
 
 open("tmp", "w").write(web.format("Welcome %s !" % variables_envi["pseudo"]))

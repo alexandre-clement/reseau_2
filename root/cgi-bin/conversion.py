@@ -27,11 +27,13 @@ web = "<!DOCTYPE html><HTML>\
        </BODY>\
        </HTML>"
 
-variables_envi = {key: value for (key, value) in [arg.split("=") for arg in os.environ["QUERY_STRING"].split("&")]}
+tmp = open("tmp").read()
+variables_envi = {key: value for (key, value) in [arg.split("=") for arg in tmp.split("&")]}
 
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket.connect(("52.4.66.53", 80))
-socket.send(request.format(len(body)) + body.format(variables_envi["ubiNum"]))
+sended_text = body.format(variables_envi["ubiNum"])
+socket.send(request.format(len(sended_text) - 1) + sended_text)
 
 while True:
     msg = socket.recv(1024)
