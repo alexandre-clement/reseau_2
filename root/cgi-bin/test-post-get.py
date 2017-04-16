@@ -5,10 +5,10 @@ import os
 
 if "QUERY_STRING" in os.environ:
     method = "GET"
-    var = dict(item for item in [arg.split("=") for arg in os.environ["QUERY_STRING"].split("&")])
+    var = dict(arg.split("=") for arg in os.environ["QUERY_STRING"].split("&"))
 else:
     method = "POST"
-    var = dict(item for item in [arg.split("=") for arg in sys.stdin.read().split("&")])
+    var = dict(arg.split("=") for arg in sys.stdin.read().split("&"))
 
 web_page = """<!DOCTYPE html><HTML>
        <HEAD>
